@@ -17,22 +17,32 @@ class BurgerBuilder extends Component {
 			cheese: 0,
 			meat: 0
 		},
-		totalPrice: 4
+		totalPrice: 4,
+		purchasable: false
 	}
 
-	addIngredientHandler = (type) => {
-		debugger;
-		this.setState((currentState) => {
+	updatePurchaseState = () => {
+		this.setState(currentState => {
+		const sum = Object.keys(currentState.ingredients)
+					.map(igKey => currentState.ingredients[igKey])
+					.reduce((acc, num) => acc+num)
+		return { purchasable: sum > 0 }
+		})
+	}
+
+	addIngredientHandler = type => {
+		this.setState(currentState => {
 			let newstate = currentState.ingredients;
 			newstate[type]++;
 			let newPrice = currentState.totalPrice;
 			newPrice = newPrice + INGREDIENT_PRICES[type];
 			return { ingredients: newstate, totalPrice: newPrice}
 		})
+		this.updatePurchaseState();
 	}
 
-	removeIngredientHandler = (type) => {
-		this.setState((currentState) => {
+	removeIngredientHandler = type => {
+		this.setState(currentState => {
 			const newstate = currentState.ingredients;
 			if (newstate[type] <= 0) {
 				return;
@@ -42,6 +52,7 @@ class BurgerBuilder extends Component {
 			newPrice = newPrice - INGREDIENT_PRICES[type];
 			return { ingredients: newstate, totalPrice: newPrice}
 		})
+		this.updatePurchaseState();
 	}
 
 	render() {
@@ -57,6 +68,7 @@ class BurgerBuilder extends Component {
 					remove={this.removeIngredientHandler}
 					disabled={disabledInfo}
 					price={this.state.totalPrice}
+					purchasable={this.state.purchasable}
 				/>
 			</>
 		);
