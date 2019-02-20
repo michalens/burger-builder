@@ -6,12 +6,12 @@ import './SideDrawer.css'
 
 const SideDrawer = props => {
 	let attachedClasses = ['SideDrawer', 'Close']
-	if (props.open) {
+	if (props.opened) {
 		attachedClasses = ['SideDrawer', 'Open']
 	}
 	return(
 		<>
-			<Backdrop show={props.open} clicked={props.closed}/>
+			<Backdrop show={props.opened} clicked={props.close}/>
 			<div className={attachedClasses.join(' ')}>
 				<Logo height='11%'/>
 				<nav>

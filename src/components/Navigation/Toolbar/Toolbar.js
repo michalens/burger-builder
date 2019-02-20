@@ -5,7 +5,7 @@ import './Toolbar.css'
 
 const Toolbar = props => (
 	<header className={'Toolbar'}>
-		<div>MENU</div>
+		<button onClick={props.openSideDrawer}>MENU</button>
 		<Logo height='80%'/>
 		<nav className={'DesktopOnly'}>
 			<NavigationItems />
