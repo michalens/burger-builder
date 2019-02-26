@@ -18,10 +18,22 @@ class Checkout extends Component {
 		axios.get('https://burger-builder-3ecd8.firebaseio.com/orders.json')
 	}
 
+	checkoutCancelledHandler = () => {
+		this.props.history.goBack()
+	}
+
+	checkoutContinuedHandler = () => {
+		this.props.history.replace('/checkout/contact-data')	
+	}
+
 	render() {
 		return(
 			<div>
-				<CheckoutSummary ingredients={this.state.ingredients} />
+				<CheckoutSummary 
+					ingredients={this.state.ingredients} 
+					checkoutCancelled={this.checkoutCancelledHandler}
+					checkoutContinued={this.checkoutContinuedHandler}
+				/>
 			</div>
 		)
 	}
