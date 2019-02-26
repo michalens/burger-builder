@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
+import { Route } from 'react-router-dom'
 
-import axios from 'axios'
-// import './Checkout.css'
+import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
+import ContactData from './ContactData/ContactData'
+
+// import axios from 'axios'
+
 
 class Checkout extends Component {
 	state = {
@@ -34,6 +37,7 @@ class Checkout extends Component {
 					checkoutCancelled={this.checkoutCancelledHandler}
 					checkoutContinued={this.checkoutContinuedHandler}
 				/>
+				<Route path={this.props.match.path + '/contact-data'} component={ContactData} />
 			</div>
 		)
 	}
