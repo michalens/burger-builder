@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux'
+
 import Button from '../../../components/UI/Button/Button'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import Input from '../../../components/UI/Input/Input'
@@ -92,6 +94,29 @@ class ContactData extends Component {
 		loading: false
 	}
 
+	orderHandler = (event) => {
+		event.preventDefault();
+		this.setState({loading: true})
+		const formData = {};
+		for (let formElementIdentifier in this.state.orderForm) {
+			formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value
+		}
+		const order = {
+			ingredients: this.props.ings,
+			price: this.props.price,
+			orderData: formData,
+		}
+		axios.post('/orders.json', order)
+			.then(response => {
+				this.setState({loading: false})	
+				this.props.history.push('/')
+			})
+			.catch(err => {
+				this.setState({loading: false})	
+			})
+	}
+
+
 	checkValidity = (value, rules) => {
 		let isValid = true;
 		
@@ -110,27 +135,6 @@ class ContactData extends Component {
 		return isValid
 	}
 
-	orderHandler = (event) => {
-		event.preventDefault();
-		this.setState({loading: true})
-		const formData = {};
-		for (let formElementIdentifier in this.state.orderForm) {
-			formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value
-		}
-		const order = {
-			ingredients: this.props.ingredients,
-			price: this.props.price,
-			orderData: formData,
-		}
-		axios.post('/orders.json', order)
-			.then(response => {
-				this.setState({loading: false})	
-				this.props.history.push('/')
-			})
-			.catch(err => {
-				this.setState({loading: false})	
-			})
-	}
 
 	inputChangedHandler = (event, inputIdentifier) => {
 	    const updatedOrderForm = {
@@ -188,5 +192,13 @@ class ContactData extends Component {
 	}
 }
 
-export default ContactData;
+const mapStateToProps = state => {
+	return {
+		ings: state.ingredients,
+		price: state.totalPrice
+	}
+}
+
+
+export default connect(mapStateToProps)(ContactData);
 	
