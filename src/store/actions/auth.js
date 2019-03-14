@@ -17,7 +17,7 @@ export const authSuccess = (authData) => {
 export const authFail = (err) => {
 	return {
 		type: actionTypes.AUTH_FAIL,
-		err: err
+		error: err
 	}
 }
 
@@ -40,8 +40,8 @@ export const auth = (email, password, isSignUp) => {
 				dispatch(authSuccess(resp.data))
 			})
 			.catch(err => {
-				console.log(err)
-				dispatch(authFail(err))
+				console.log(err.response.data.error.message)
+				dispatch(authFail(err.response.data.error))
 			})
 	}
 }
