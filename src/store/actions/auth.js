@@ -25,7 +25,7 @@ export const authFail = (err) => {
 export const logout = () => {
 	localStorage.removeItem('token')
 	localStorage.removeItem('expirationDate')
-	localStorage.removeItem('localId')
+	localStorage.removeItem('userId')
 	return {
 		type: actionTypes.AUTH_LOGOUT
 	}
@@ -48,9 +48,9 @@ export const auth = (email, password, isSignUp) => {
 			password: password,
 			returnSecureToken: true
 		}
-		let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' + process.env.FIREBASE_API
+		let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyAJG0MhQ-T7_IMUUnGLcFm6SqbS2Lj_0OY'
 		if (!isSignUp) {
-			url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + process.env.FIREBASE_API
+			url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyAJG0MhQ-T7_IMUUnGLcFm6SqbS2Lj_0OY'
 		}
 		axios.post(url, authData)
 			.then(resp => {
@@ -62,7 +62,6 @@ export const auth = (email, password, isSignUp) => {
 				dispatch(checkAuthTimeout(resp.data.expiresIn))
 			})
 			.catch(err => {
-				console.log(err.response.data.error.message)
 				dispatch(authFail(err.response.data.error))
 			})
 	}
@@ -82,7 +81,7 @@ export const authCheckState = () => {
 			dispatch(logout())
 		} else {
 			const expirationDate = new Date(localStorage.getItem('expirationDate'))
-			if (expirationDate > new Date()){
+			if (expirationDate <= new Date()){
 				dispatch(logout())
 			} else {
 				const userId = localStorage.getItem('userId')
