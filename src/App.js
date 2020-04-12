@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import {Route, Switch, withRouter, Redirect} from 'react-router-dom'
 import {connect} from  'react-redux'
 
@@ -10,42 +10,39 @@ import Auth from './containers/Auth/Auth'
 import Logout from './containers/Auth/Logout/Logout'
 import * as actions from './store/actions'
 
-class App extends Component {
+const App = (props) => {
+
+  useEffect(() => {
+    props.onTryAutoSignUp()
+  }, [])
   
-  componentDidMount() {
-    this.props.onTryAutoSignUp()
-  }
+  let routes = (
+    <Switch>
+      <Route path='/auth' component={Auth} />
+      <Route path='/' exact component={BurgerBuilder} />
+      <Redirect to="/" />
+    </Switch>
+  )
   
-  render() {
-    
-    let routes = (
+  if (props.isAuth) {
+    routes = (
       <Switch>
+        <Route path='/checkout' component={Checkout} />
+        <Route path='/orders' component={Orders} />
+        <Route path='/logout' component={Logout} />
         <Route path='/auth' component={Auth} />
         <Route path='/' exact component={BurgerBuilder} />
         <Redirect to="/" />
-      </Switch>
+      </Switch>  
     )
-    
-    if (this.props.isAuth) {
-      routes = (
-        <Switch>
-      		<Route path='/checkout' component={Checkout} />
-      		<Route path='/orders' component={Orders} />
-          <Route path='/logout' component={Logout} />
-          <Route path='/auth' component={Auth} />
-          <Route path='/' exact component={BurgerBuilder} />
-          <Redirect to="/" />
-      	</Switch>  
-      )
-    }
-    return (
-      <div>
-        <Layout>
-        	{routes}
-        </Layout>
-      </div>
-    );
   }
+  return (
+    <div>
+      <Layout>
+        {routes}
+      </Layout>
+    </div>
+  );
 }
 const mapStateToProps = state => {
   return {
